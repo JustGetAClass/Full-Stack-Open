@@ -1,4 +1,34 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
+
+const Button = ({ clickEvent, text }) => {
+  return <button onClick={clickEvent}>{text}</button>;
+};
+
+const Title = ({ text }) => {
+  return <h1>{text}</h1>;
+};
+
+const Anecdote = ({ quote, vote }) => {
+  return (
+    <div>
+      <h3>{quote}</h3>
+      <p>has {vote} votes</p>
+    </div>
+  );
+};
+
+const Highest = ({ votes, anecdote }) => {
+  const max = Math.max(...votes);
+  const highest = votes.indexOf(max);
+  const mostVotes = anecdote[highest];
+
+  if (max === 0) {
+    return <h1>Go vote</h1>;
+  }
+
+  return <Anecdote quote={mostVotes} vote={votes[highest]} />;
+};
 
 const App = () => {
   const anecdotes = [
@@ -12,19 +42,32 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
+  const arrayLength = anecdotes.length;
+
   const [selected, setSelected] = useState(0);
+  const [vote, setVote] = useState(Array(8).fill(0));
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <button
-        onClick={() => {
-          const random = Math.floor(Math.random() * anecdotes.length);
+      <Title text="Anecdote of the day" />
+      <Anecdote quote={anecdotes[selected]} vote={vote[selected]} />
+      <Button
+        clickEvent={() => {
+          const newVotes = [...vote];
+          newVotes[selected] += 1;
+          setVote(newVotes);
+        }}
+        text="vote"
+      />
+      <Button
+        clickEvent={() => {
+          const random = Math.floor(Math.random() * arrayLength);
           setSelected(random);
         }}
-      >
-        next anecdote
-      </button>
+        text="next anecdote"
+      />
+      <Title text="Anecdote with most votes" />
+      <Highest votes={vote} anecdote={anecdotes} />
     </div>
   );
 };
