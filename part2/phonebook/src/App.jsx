@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-1234567" },
+    { name: "Arto Hellas", number: "040-1234567", id: 1 },
     { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
     { name: "Dan Abramov", number: "12-43-234345", id: 3 },
     { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
@@ -34,10 +34,11 @@ const App = () => {
     const newObject = {
       name: newName,
       number: newNumber,
+      id: persons.length + 1,
     };
     persons.forEach((person) =>
       person.name === newObject.name
-        ? alert(`${person.name} is already to the phonebook`)
+        ? alert(`${person.name} is already added to the phonebook`)
         : setPersons(persons.concat(newObject))
     );
     setNewName("");
@@ -48,7 +49,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <div>
-        filter shown with:&nbsp;{" "}
+        filter shown with:&nbsp;
         <input value={search} onChange={handleSearch} />
       </div>
 
@@ -69,7 +70,7 @@ const App = () => {
       <h2>Numbers</h2>
 
       {numbersToShow.map((person) => (
-        <div key={person.name}>
+        <div key={person.id}>
           {person.name} {person.number}
         </div>
       ))}
