@@ -1,10 +1,10 @@
-const Persons = ({ arr }) => {
+import Person from "./Person";
+
+const Persons = ({ arr, set }) => {
   return (
     <div>
       {arr.map((person) => (
-        <div key={person.id}>
-          {person.name} {person.number}
-        </div>
+        <Person key={person.id} person={person} refresh={set}/>
       ))}
     </div>
   );

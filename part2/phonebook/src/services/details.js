@@ -12,4 +12,9 @@ const create = (object) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create };
+const deleteItem = (id) => {
+  const request = axios.delete(`${url}/${id}`);
+  return request.then((response) => response.data);
+};
+
+export default { getAll, create, deleteItem};

@@ -75,7 +75,7 @@ const App = () => {
         numberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons arr={numbersToShow} />
+      <Persons arr={numbersToShow} set={setPersons}/>
     </div>
   );
 };
