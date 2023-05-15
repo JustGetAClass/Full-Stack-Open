@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import details from "./services/details";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,11 +11,15 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [showAll, setShowAll] = useState(true);
 
+  const arrNames = persons.reduce((arr, names) => arr.concat(names.name), []);
+
   const handleEffect = () => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      const data = response.data;
-      setPersons(data);
-    });
+    details
+      .getAll()
+      .then((initialData) => {
+        setPersons(initialData);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(handleEffect, []);
@@ -44,11 +48,16 @@ const App = () => {
       number: newNumber,
       id: persons.length + 1,
     };
-    persons.forEach((person) =>
-      person.name === newObject.name
-        ? alert(`${person.name} is already added to the phonebook`)
-        : setPersons(persons.concat(newObject))
-    );
+
+    arrNames.includes(newObject.name)
+      ? alert(`${newObject.name} is already in the phonebook`)
+      : details
+          .create(newObject)
+          .then((newData) => {
+            setPersons(persons.concat(newData));
+          })
+          .catch((err) => console.log(err));
+
     setNewName("");
     setNewNumber("");
   };
