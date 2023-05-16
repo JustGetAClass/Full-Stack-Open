@@ -62,6 +62,8 @@ const App = () => {
             )
           );
         });
+        setNewName("");
+        setNewNumber("");
       }
     } else {
       details
