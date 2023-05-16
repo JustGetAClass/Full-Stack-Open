@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const Notification = ({ message, changeColor }) => {
   if (message === null) {
     return null;
