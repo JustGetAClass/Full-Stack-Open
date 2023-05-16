@@ -17,4 +17,9 @@ const deleteItem = (id) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create, deleteItem};
+const update = (id, object) => {
+  const request = axios.put(`${url}/${id}`, object);
+  return request.then((response) => response.data);
+};
+
+export default { getAll, create, deleteItem, update };

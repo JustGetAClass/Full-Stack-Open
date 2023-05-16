@@ -11,8 +11,6 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [showAll, setShowAll] = useState(true);
 
-  const arrNames = persons.reduce((arr, names) => arr.concat(names.name), []);
-
   const handleEffect = () => {
     details
       .getAll()
@@ -49,17 +47,33 @@ const App = () => {
       id: persons.length + 1,
     };
 
-    arrNames.includes(newObject.name)
-      ? alert(`${newObject.name} is already in the phonebook`)
-      : details
-          .create(newObject)
-          .then((newData) => {
-            setPersons(persons.concat(newData));
-          })
-          .catch((err) => console.log(err));
+    if (persons.filter((p) => p.name === newObject.name).length > 0) {
+      if (
+        window.confirm(
+          `${newObject.name} is already added to the phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const person = persons.find((p) => p.name === newObject.name);
+        const changedNumber = { ...person, number: newObject.number };
+        details.update(person.id, changedNumber).then((updatededDetails) => {
+          setPersons(
+            persons.map((p) =>
+              p.name === newObject.name ? updatededDetails : p
+            )
+          );
+        });
+      }
+    } else {
+      details
+        .create(newObject)
+        .then((newData) => {
+          setPersons(persons.concat(newData));
+        })
+        .catch((err) => console.log(err));
 
-    setNewName("");
-    setNewNumber("");
+      setNewName("");
+      setNewNumber("");
+    }
   };
 
   return (
@@ -75,7 +89,7 @@ const App = () => {
         numberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons arr={numbersToShow} set={setPersons}/>
+      <Persons arr={numbersToShow} set={setPersons} />
     </div>
   );
 };

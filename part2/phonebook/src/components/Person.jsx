@@ -3,8 +3,10 @@ import details from "../services/details";
 
 const Person = ({ person, refresh }) => {
   const handleDelete = () => {
-    details.deleteItem(person.id);
-    details.getAll().then((data) => refresh(data));
+    if (window.confirm(`Delete ${person.name}?`)) {
+      details.deleteItem(person.id);
+      details.getAll().then((data) => refresh(data));
+    }
   };
 
   return (
