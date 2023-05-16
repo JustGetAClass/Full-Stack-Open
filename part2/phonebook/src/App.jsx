@@ -3,6 +3,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import details from "./services/details";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,6 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
   const [showAll, setShowAll] = useState(true);
+  const [error, setError] = useState(null);
+  const [color, setcolor] = useState(true);
 
   const handleEffect = () => {
     details
@@ -55,13 +58,25 @@ const App = () => {
       ) {
         const person = persons.find((p) => p.name === newObject.name);
         const changedNumber = { ...person, number: newObject.number };
-        details.update(person.id, changedNumber).then((updatededDetails) => {
-          setPersons(
-            persons.map((p) =>
-              p.name === newObject.name ? updatededDetails : p
-            )
-          );
-        });
+        details
+          .update(person.id, changedNumber)
+          .then((updatededDetails) => {
+            setPersons(
+              persons.map((p) =>
+                p.name === newObject.name ? updatededDetails : p
+              )
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+            setcolor(false);
+            setError(
+              `Information of ${newObject.name} has already been removed from the server`
+            );
+            setTimeout(() => {
+              setError(null);
+            }, 5000);
+          });
         setNewName("");
         setNewNumber("");
       }
@@ -70,9 +85,14 @@ const App = () => {
         .create(newObject)
         .then((newData) => {
           setPersons(persons.concat(newData));
+          setcolor(true);
+          setError(`Added ${newObject.name}`);
         })
         .catch((err) => console.log(err));
 
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
       setNewName("");
       setNewNumber("");
     }
@@ -81,6 +101,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={error} changeColor={color} />
       <Filter search={search} handleSearch={handleSearch} />
       <h2>add a new</h2>
       <PersonForm
