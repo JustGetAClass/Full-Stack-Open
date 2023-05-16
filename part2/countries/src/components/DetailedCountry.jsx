@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import Weather from "./Weather";
+
 const DetailedCountry = ({ country }) => {
   const languages = country.languages;
   const langArr = [];
@@ -18,6 +20,7 @@ const DetailedCountry = ({ country }) => {
         ))}
       </ul>
       <img src={country.flags.png} alt={country.flags.alt} />
+      <Weather name={country.name.common}/>
     </div>
   );
 };
