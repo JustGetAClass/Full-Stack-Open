@@ -88,7 +88,10 @@ const App = () => {
           setcolor(true);
           setError(`Added ${newObject.name}`);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setcolor(false);
+          setError(err.response.data.error);
+        });
 
       setTimeout(() => {
         setError(null);
