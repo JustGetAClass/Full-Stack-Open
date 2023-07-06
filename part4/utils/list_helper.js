@@ -14,11 +14,17 @@ const favoriteBlog = (blogs) => {
 		}
 	});
 
-	return blogs.find((blog) => blog.likes === highest);
+	const favorite = blogs.find((blog) => blog.likes === highest);
+
+	return {
+		title: favorite.title,
+		author: favorite.author,
+		likes: favorite.likes,
+	};
 };
 
 module.exports = {
 	dummy,
 	totalLikes,
-    favoriteBlog
+	favoriteBlog,
 };
