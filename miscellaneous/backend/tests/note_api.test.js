@@ -29,7 +29,7 @@ test("notes are returned as json", async () => {
 		.get("/api/notes")
 		.expect(200)
 		.expect("Content-Type", /application\/json/);
-}, 100000);
+});
 
 test("all notes are returned", async () => {
 	const response = await api.get("/api/notes");
@@ -39,7 +39,6 @@ test("all notes are returned", async () => {
 
 test("a specific note is within the returned notes", async () => {
 	const response = await api.get("/api/notes");
-	console.log(response.body);
 	const contents = response.body.map((r) => r.content);
 	expect(contents).toContain("Browser can execute only JavaScript");
 });
