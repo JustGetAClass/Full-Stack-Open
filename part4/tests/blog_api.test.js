@@ -71,6 +71,15 @@ test("blog without likes is not added", async () => {
 	expect(addedBlog.likes).toEqual(0);
 });
 
+test("blog with no title or url returns 400", async () => {
+	const newBlog = {
+		author: "Blog Author",
+		likes: 5,
+	};
+
+	await api.post("/api/blogs").send(newBlog).expect(400);
+});
+
 afterAll(async () => {
 	await mongoose.connection.close();
 });

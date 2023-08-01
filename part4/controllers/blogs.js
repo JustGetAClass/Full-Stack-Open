@@ -8,6 +8,12 @@ blogsRouter.get("/", async (request, response) => {
 
 blogsRouter.post("/", async (request, response) => {
 	const body = request.body;
+
+	if (body.title === undefined || body.url === undefined) {
+		response.status(400).end();
+		return;
+	}
+	
 	const blog = new Blog({
 		title: body.title,
 		author: body.author,
