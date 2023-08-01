@@ -51,6 +51,26 @@ test("a blog can be added", async () => {
 	expect(titles).toContain("Blog Exercise");
 });
 
+test("blog without likes is not added", async () => {
+	const newBlog = {
+		title: "Blog Exercise",
+		author: "Blog Author",
+		url: "Blog Link",
+	};
+
+	await api
+		.post("/api/blogs")
+		.send(newBlog)
+		.expect(201)
+		.expect("Content-Type", /application\/json/);
+
+	const blogsAtEnd = await helper.blogsInDb();
+	expect(blogsAtEnd).toHaveLength(helper.blogs.length + 1);
+
+	const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
+	expect(addedBlog.likes).toEqual(0);
+});
+
 afterAll(async () => {
 	await mongoose.connection.close();
 });
