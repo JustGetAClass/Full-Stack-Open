@@ -13,7 +13,7 @@ blogsRouter.post("/", async (request, response) => {
 		response.status(400).end();
 		return;
 	}
-	
+
 	const blog = new Blog({
 		title: body.title,
 		author: body.author,
