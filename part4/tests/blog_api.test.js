@@ -80,6 +80,13 @@ test("blog with no title or url returns 400", async () => {
 	await api.post("/api/blogs").send(newBlog).expect(400);
 });
 
+test("deleting a blog", async () => {
+	const blogsAtStart = await helper.blogsInDb();
+	const blogToDelete = blogsAtStart[0];
+
+	await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+});
+
 afterAll(async () => {
 	await mongoose.connection.close();
 });
