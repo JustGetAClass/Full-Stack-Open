@@ -95,6 +95,26 @@ test("deleting a blog", async () => {
 	expect(titles).not.toContain(blogToDelete.title);
 });
 
+test("update a blog", async () => {
+	const blogsAtStart = await helper.blogsInDb();
+	const blogToUpdate = blogsAtStart[0];
+
+	const updatedBlog = {
+		title: "Amazing world",
+		author: "JK Simons",
+		url: "JK.com",
+		likes: 56,
+	};
+
+	await api
+		.put(`/api/blogs/${blogToUpdate.id}`)
+		.send(updatedBlog)
+		.expect(200);
+
+	const blogsAtEnd = await helper.blogsInDb();
+	expect(blogsAtEnd).toHaveLength(helper.blogs.length);
+});
+
 afterAll(async () => {
 	await mongoose.connection.close();
 });
