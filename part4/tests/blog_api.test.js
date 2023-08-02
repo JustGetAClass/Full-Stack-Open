@@ -85,6 +85,14 @@ test("deleting a blog", async () => {
 	const blogToDelete = blogsAtStart[0];
 
 	await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+	const blogsAtEnd = await helper.blogsInDb();
+
+	expect(blogsAtEnd).toHaveLength(helper.blogs.length - 1);
+
+	const titles = blogsAtEnd.map((blog) => blog.title);
+
+	expect(titles).not.toContain(blogToDelete.title);
 });
 
 afterAll(async () => {
